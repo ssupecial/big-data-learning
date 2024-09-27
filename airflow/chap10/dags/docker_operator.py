@@ -1,4 +1,4 @@
-from airflow.operators.docker_operator import DockerOperator
+from airflow.providers.docker.operators.docker import DockerOperator
 from docker.types import Mount
 from airflow import DAG
 import datetime as dt
@@ -32,7 +32,7 @@ with DAG(
         ],
         network_mode="airflow",
         container_name="fetch-ratings-test",
-        auto_remove=True,
+        auto_remove="force",
         # Note: this host path is on the HOST, not in the Airflow docker container.
         mounts=[Mount(source="/Users/admin/Desktop/data", target="/data", type="bind")],
     )
