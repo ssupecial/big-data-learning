@@ -8,9 +8,9 @@ import os
 with DAG(
     dag_id="docker-operator-test",
     description="Fetches data from the Rocket API using Docker.",
-    start_date=dt.datetime(2024, 9, 1),
+    start_date=dt.datetime(2024, 9, 24),
     schedule_interval="@daily",
-    catchup=False
+    catchup=True
 ) as dag:
     fetch_rockets = DockerOperator(
         task_id="fetch_rockets",
@@ -21,7 +21,7 @@ with DAG(
             "{{ds}}",
         ],
         network_mode="bridge", # or airflow
-        container_name="fetch-rocket-da",
+        container_name="fetch-rocket-da-{{ds}}",
         auto_remove="force",
         # Note: this host path is on the HOST, not in the Airflow docker container.
         mounts=[Mount(source="/Users/admin/Desktop/data", target="/data", type="bind")],
