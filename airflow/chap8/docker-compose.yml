@@ -8,6 +8,8 @@ x-airflow-common:
   build:
     context: ./docker/airflow
     dockerfile: Dockerfile
+    args:
+      AIRFLOW_UID: ${AIRFLOW_UID}
   environment: 
     &airflow_environment
     AIRFLOW__CORE__EXECUTOR: CeleryExecutor
@@ -37,7 +39,7 @@ x-airflow-common:
     - ${AIRFLOW_PROJ_DIR:-.}/config:/opt/airflow/config
     - ${AIRFLOW_PROJ_DIR:-.}/plugins:/opt/airflow/plugins
     - /var/run/docker.sock:/var/run/docker.sock
-  user: airflow
+  user: "${AIRFLOW_UID}:0"
   depends_on:
     &airflow-common-depends-on
     redis:
