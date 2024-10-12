@@ -20,7 +20,7 @@ def test_dag_integrity(dag_file):
     module = importlib.util.module_from_spec(mod_spec)
     mod_spec.loader.exec_module(module)
 
-    dag_objects = [var for var in vars(module).values() 
+    dag_objects = [var for var in vars(module).values()
                    if isinstance(var, DAG)]
     assert dag_objects
 
