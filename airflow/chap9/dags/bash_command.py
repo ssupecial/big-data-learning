@@ -8,5 +8,6 @@ with DAG(
     schedule_interval="@once"
 ):
     BashOperator(
-        task_id="this_should_fail"
+        task_id="this_should_fail",
+        bash_command="ls"
     )
