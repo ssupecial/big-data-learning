@@ -13,6 +13,9 @@ DAG_FILES = glob.glob(DAG_PATH, recursive=True)
 
 @pytest.mark.parametrize("dag_file", DAG_FILES)
 def test_dag_integrity(dag_file):
+    """
+    Test the integrity of the given DAG by checking for cycles.
+    """
     module_name, _ = os.path.splitext(dag_file)
     module_path = os.path.join(DAG_PATH, dag_file)
     mod_spec = importlib.util.spec_from_file_location(module_name, module_path)

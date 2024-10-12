@@ -12,5 +12,7 @@ with DAG(
     t2 = EmptyOperator(task_id="t2")
     t3 = EmptyOperator(task_id="t3")
 
-    # t1 >> t2 >> t3 >> t1 # This should be failed
+    # This should be failed because of DAG cycle
+    # t1 >> t2 >> t3 >> t1 
+    
     t1 >> t2 >> t3
