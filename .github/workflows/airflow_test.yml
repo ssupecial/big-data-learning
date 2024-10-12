@@ -1,0 +1,59 @@
+name: python static checks and tests
+on:
+  push:
+    branches: ["main"]
+
+jobs:
+  testing:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v1
+      - name: Setup Python
+        uses: actions/setup-python@v1
+        with:
+          python-version: 3.12.6
+          architecture: x64
+
+      - name: Get changed files
+        id: changed-files
+        run: echo "::set-output name=files::$(git diff --name-only ${{ github.sha }} ${{ github.event.before }})"
+
+      - name: Extract directories
+        id: extract-dirs
+        run: echo "::set-output name=dirs::$(echo '${{ steps.changed-files.outputs.files }}' | xargs -n1 dirname | sort -u)"
+
+      - name: Install Flake8
+        run: pip install flake8
+
+      - name: Run Flake8
+        run: |
+          for dir in ${{ steps.extract-dirs.outputs.dirs }}; do
+            flake8 $dir
+          done
+
+      - name: Install Pylint
+        run: pip install pylint
+
+      - name: Run Pylint
+        run: |
+          for dir in ${{ steps.extract-dirs.outputs.dirs }}; do
+            find $dir -name "*.py" | xargs pylint --output-format=colorized
+          done
+
+      - name: Install Black
+        run: pip install black
+
+      - name: Run Black
+        run: |
+          for dir in ${{ steps.extract-dirs.outputs.dirs }}; do
+            find $dir -name "*.py" | xargs black --check
+          done
+
+      - name: Install dependencies
+        run: pip install apache-airflow pytest
+
+      - name: Test DAG integrity
+        run: |
+          for dir in ${{ steps.extract-dirs.outputs.dirs }}; do
+            pytest $dir/tests/
+          done
