@@ -1,6 +1,7 @@
+import datetime as dt
 from airflow import DAG
 from airflow.operators.bash import BashOperator
-import datetime as dt
+
 with DAG(
     dag_id="bash_command",
     start_date=dt.datetime(2024, 10, 11),
