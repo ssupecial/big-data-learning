@@ -1,7 +1,7 @@
 name: python static checks and tests
 on:
   push:
-    branches: ["main"]
+    branches: ["test"]
 
 jobs:
   testing:
