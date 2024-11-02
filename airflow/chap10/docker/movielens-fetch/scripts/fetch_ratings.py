@@ -9,7 +9,7 @@ import click
 import requests
 
 
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(format="[%(asctime)-15s] %(levelname)s - %(message)s")
 
 
 @click.command()

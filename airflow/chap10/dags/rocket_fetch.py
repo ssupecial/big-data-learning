@@ -10,7 +10,7 @@ with DAG(
     description="Fetches data from the Rocket API using Docker.",
     start_date=dt.datetime(2024, 9, 24),
     schedule_interval="@daily",
-    catchup=True
+    catchup=False
 ) as dag:
     fetch_rockets = DockerOperator(
         task_id="fetch_rockets",
