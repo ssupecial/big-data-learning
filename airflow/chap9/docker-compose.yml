@@ -190,7 +190,7 @@ services:
     <<: *airflow-common
     command: webserver
     ports:
-      - 8080:8080
+      - ${AIRFLOW_WEB_PORT}:8080
     healthcheck:
       test: ["CMD", "curl", "--fail", "http://localhost:8080/health"]
       interval: 30s
@@ -203,17 +203,17 @@ services:
       init:
         condition: service_completed_successfully
 
-  movielens:
-    build: 
-      context: docker/movielens-api
-      dockerfile: Dockerfile
-    ports:
-      - "5000:5000"
-    environment:
-      - API_USER=airflow
-      - API_PASSWORD=airflow
-    networks:
-      - airflow
+  # movielens:
+  #   build: 
+  #     context: docker/movielens-api
+  #     dockerfile: Dockerfile
+  #   ports:
+  #     - "5000:5000"
+  #   environment:
+  #     - API_USER=airflow
+  #     - API_PASSWORD=airflow
+  #   networks:
+  #     - airflow
 
 volumes:
   postgres-db-volume:
