@@ -24,7 +24,7 @@ with DAG(
             "--end_date",
             "{{next_ds}}",
             "--output_path",
-            "/data/ratings/{{ds}}/json",
+            "/data/ratings/{{ds}}.json",
             "--user",
             os.environ["MOVIELENS_USER"],
             "--password",
@@ -38,3 +38,18 @@ with DAG(
         ],  # 호스트 시스템 <-> movielens-fetch 도커 컨테이너
         network_mode="airflow",  # movielens-api 컨테이너와 같은 도커 네트워크여야함
     )
+
+    rank_movies = DockerOperator(
+        task_id="rank_movies",
+        image="ssupecial-airflow/movielens-ranking",
+        command=[
+            "rank-movies",
+            "--input_path",
+            "/data/ratings/{{ds}}.json",
+            "--output_path",
+            "/data/rankings/{{ds}}.csv",
+        ],
+        mounts=[Mount(source=os.environ["HOST_PATH"], target="/data", type="bind")],
+    )
+
+    fetch_ratings >> rank_movies

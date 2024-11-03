@@ -27,12 +27,15 @@ x-airflow-common:
     MOVIELENS_PASSWORD: airflow
     MOVIELENS_HOST: http://movielens:5000
     HOST_PATH: ${HOST_PATH}
-
+  extra_hosts:
+    - "kubernetes:${KUBE_IP}"
   volumes:
     - ${AIRFLOW_PROJ_DIR:-.}/dags:/opt/airflow/dags
     - ${AIRFLOW_PROJ_DIR:-.}/logs:/opt/airflow/logs
     - ${AIRFLOW_PROJ_DIR:-.}/config:/opt/airflow/config
     - ${AIRFLOW_PROJ_DIR:-.}/plugins:/opt/airflow/plugins
+    - ${AIRFLOW_PROJ_DIR:-.}/config/.kube:/home/airflow/.kube
+    - ${AIRFLOW_PROJ_DIR:-.}/config/.minikube:/home/airflow/.minikube
     - /var/run/docker.sock:/var/run/docker.sock
   user: "${AIRFLOW_UID:-50000}:0"
   depends_on:
@@ -43,6 +46,7 @@ x-airflow-common:
       condition: service_healthy
   networks:
     - airflow
+  
 
 services:
   postgres:
