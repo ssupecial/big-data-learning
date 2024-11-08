@@ -6,7 +6,7 @@ x-airflow-common:
     context: ./docker/airflow
     dockerfile: Dockerfile
     args:
-      AIRFLOW_UID: ${AIRFLOW_UID}
+      AIRFLOW_UID: ${AIRFLOW_UID:-50000}
   environment:
     &airflow-common-env
     AIRFLOW__CORE__EXECUTOR: CeleryExecutor
@@ -75,7 +75,7 @@ services:
     <<: *airflow-common
     command: webserver
     ports:
-      - "${AIRFLOW_WEB_PORT}:8080"
+      - "${AIRFLOW_WEB_POR:-8080}:8080"
     healthcheck:
       test: ["CMD", "curl", "--fail", "http://localhost:8080/health"]
       interval: 30s
@@ -123,7 +123,7 @@ services:
       DUMB_INIT_SETSID: "0"
     restart: always
     group_add:
-      - ${DOCKER_GID}
+      - ${DOCKER_GID:-0}
     depends_on:
       <<: *airflow-common-depends-on
       init:
