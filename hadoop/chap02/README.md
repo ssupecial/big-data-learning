@@ -44,3 +44,19 @@ root@namenode:/# hdfs dfs -cat /user/root/output/part-r-00000
 0043012650999991949032412004+62300+010750FM-12+048599999V0202701N00461220001CN0500001N9+01111+99999999999
 0043012650999991949032418004+62300+010750FM-12+048599999V0202701N00461220001CN0500001N9+00781+99999999999
 ```
+
+### 번외 (파이썬 맵리듀스 실행)
+```
+# 폴더 구조는 다음과 같음
+chap02/
+├── data
+│   ├── temperature_sample.txt
+└── python_version
+    ├── Dockerfile
+    ├── map.py
+    └── reduce.py
+
+# python_version 폴더 내에서 실행할 것
+$ docker build -t temperature_python -f ./Dockerfile ..
+$ docker run temperature_python
+```
