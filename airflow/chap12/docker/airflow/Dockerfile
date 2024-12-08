@@ -8,10 +8,8 @@ ARG TARGETPLATFORM
 # Set environment variables (if needed)
 ENV AIRFLOW_HOME=/opt/airflow
 
-
-USER root
-
 # Linux 환경일 경우, Airflow 관련 폴더 모두 권한 airflow로 수정
+USER root
 RUN if [ "$(uname)" = "Linux" ]; then \
         usermod -u $AIRFLOW_UID -g 0 airflow && \
         mkdir -p /opt/airflow/logs /opt/airflow/dags /opt/airflow/config /opt/airflow/plugins && \
