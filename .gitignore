@@ -6,6 +6,7 @@ test/
 **/__pycache__
 **/.kube/
 **/.minikube/
+**/data
 
 # Kafka Connect
 **/spooldir
