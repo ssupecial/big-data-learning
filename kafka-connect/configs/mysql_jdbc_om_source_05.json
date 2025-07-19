@@ -1,0 +1,29 @@
+{
+    "name": "mysql_jdbc_om_source_05",
+    "config": { 
+        "connector.class": "io.confluent.connect.jdbc.JdbcSourceConnector",
+        "tasks.max": "1",
+        "connection.url": "jdbc:mysql://mysql-test:3306/om",
+        "connection.user": "testuser",
+        "connection.password": "testpass",
+        "topic.prefix": "mysql_om_smt_key_",
+        "topic.creation.default.replication.factor": "1",
+        "topic.creation.default.partitions": "1",
+
+        "transforms": "createKey, extractKey, renameTopic",
+        "transforms.createKey.type": "org.apache.kafka.connect.transforms.ValueToKey",
+        "transforms.createKey.fields": "customer_id",
+        "transforms.extractKey.type": "org.apache.kafka.connect.transforms.ExtractField$Key",
+        "transforms.extractKey.field": "customer_id",
+        "transforms.renameTopic.type": "org.apache.kafka.connect.transforms.RegexRouter",
+        "transforms.renameTopic.regex": "mysql_om_smt_key_(.*)",
+        "transforms.renameTopic.replacement": "mysql_$1",
+
+        "catalog.pattern": "om",
+        "table.whitelist": "om.customers",
+        "poll.interval.ms": "10000",
+        "mode": "timestamp+incrementing",
+        "timestamp.column.name": "system_upd",
+        "incrementing.column.name": "customer_id"
+    }
+}
